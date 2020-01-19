@@ -1,13 +1,37 @@
+//function that returns a grid based on the parameters
+function makeGrid(rows, columns){
+    let grid = [];
+    for(let i = 0; i < rows; i++){
+        grid.push([]);
+        for(let j = 0; j < columns; j++){
+            grid[i].push(" ");
+        }
+    }
+    // console.log(grid);
+    return grid;
+}
+
+//10 x 10 grid
+let grid = makeGrid(10, 10);
+
 //Rover class declaration
+
 class Rover {
     //constructor
     
-    constructor(x, y){
+    constructor(name, x, y){
+        this.name = name;
         this.x = x;
         this.y = y;
+        grid[this.x][this.y] = this.name;
     }
-    
+
+    //direction
+
     direction = 'N';
+
+    //travel log array
+
     travelLog = [];
 
     //Turn right method
@@ -57,6 +81,7 @@ class Rover {
     //moveForward method
 
     moveForward(){
+        grid[this.y][this.x] = " ";
         switch(this.direction) {
             case "N":
                 if(this.y == 0){
@@ -93,6 +118,7 @@ class Rover {
             default:
                 console.log("Wrong direction entered");
         }
+        grid[this.y][this.x] = this.name;
         this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
         console.log(`Rover moved forward and is now at position: [${this.x}, ${this.y}]\n`);
     }
@@ -100,6 +126,7 @@ class Rover {
     //moveBackward method
 
     moveBackward(){
+        grid[this.x][this.y] = " ";
         switch(this.direction) {
             case "N":
                 if(this.y == 10){  
@@ -136,24 +163,34 @@ class Rover {
             default:
                 console.log("Wrong direction entered");
         }
+        grid[this.x][this.y] = this.name;
         this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
         console.log(`Rover moved forward and is now at position: [${this.x}, ${this.y}]\n`);
     }
 
+    //command string validation
+
+    validateString(str){
+        //regex that returns a boolean to validate the characters of the string command
+        return str.match(/^[fbrlFBRL]+$/g);
+    }
+    
     //translate direction commands method
-
+    
     translateCommands(str){
-
+        
         console.log(`translateCommands was called with: ${str}\n=================================\n`);
         
         //str input validation; returns if any of the characters doesn't match the regex
-        if(!str.match(/^[fbrlFBRL]+$/g)){
+        if(!this.validateString(str)){
             console.log('Input must be one of this letters: r, l, f, and b');
             return;
-        }
-    
-        for(let i = 0; i < str.length; i++){
-            switch(str[i]){
+        } 
+
+        // for(let i = 0; i < str.length; i++){
+        str.split('').forEach(
+            letter => {
+            switch(letter.toLowerCase()){
                 case 'r':
                     this.turnRight();
                     break;
@@ -169,14 +206,16 @@ class Rover {
                 default:
                     console.log("Wrong command!");
             }
-        };
+        });
+        
         console.log(this.travelLog);
         // this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
     }
 }
 
-const rover = new Rover(0, 0);
+const rover = new Rover("R", 0, 0);
+const rover2 = new Rover("F", 1, 1);
 
+rover.translateCommands('rffrffrf');
 
-rover.translateCommands('rfffrbb');
-
+for(let i = 0; i <= grid.length; i++) console.log(JSON.stringify(grid[i]));
