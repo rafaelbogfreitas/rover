@@ -11,7 +11,7 @@ function makeGrid(rows, columns){
     return grid;
 }
 
-//10 x 10 grid
+//create 10 x 10 grid with makeGrid function
 let grid = makeGrid(10, 10);
 
 //Rover class declaration
@@ -21,18 +21,12 @@ class Rover {
     
     constructor(name, x, y){
         this.name = name;
+        this.direction = 'N';
         this.x = x;
         this.y = y;
+        this.travelLog = [{x:this.x, y:this.y}];
         grid[this.x][this.y] = this.name;
     }
-
-    //direction
-
-    direction = 'N';
-
-    //travel log array
-
-    travelLog = [];
 
     //Turn right method
     
@@ -81,94 +75,141 @@ class Rover {
     //moveForward method
 
     moveForward(){
+        //removes the name string from the current position in the grid
         grid[this.y][this.x] = " ";
+        //checks for collision and updates the position based on the direction the rover is facing
         switch(this.direction) {
             case "N":
                 if(this.y == 0){
                     console.log("Area out of grid's range")
-                    return;
-                } else {
-                    this.y -= 1;
-                }
+                    grid[this.y][this.x] = this.name;
+                    return true;
+                } else if (this.collision(this.x, this.y - 1)) {
+                    console.log("COLLISION AHEAD!");
+                    grid[this.y][this.x] = this.name;
+                    return true;
+                } else this.y -= 1
                 break;
             case "E":
                 if(this.x == 10){
                     console.log("Area out of grid's range");
-                    return;
-                } else {
-                    this.x += 1;
-                }
+                    grid[this.y][this.x] = this.name;
+                    return true;
+                } else if(this.collision(this.x + 1, this.y)) {
+                    console.log("COLLISION AHEAD!");
+                    grid[this.y][this.x] = this.name;
+                    return true;
+                } else this.x += 1;
                 break;
             case "S":
                 if(this.y == 10){
                     console.log("Area out of grid's range");
-                    return;
-                } else {
-                    this.y += 1;
-                }
+                    grid[this.y][this.x] = this.name;
+                    return true;
+                } else if(this.collision(this.x, this.y + 1)) {
+                    console.log("COLLISION AHEAD!");
+                    grid[this.y][this.x] = this.name;
+                    return true;
+                } else this.y += 1;
                 break;
             case "W":
                 if(this.x == 0){
                     console.log("Area out of grid's range");
-                    return;
-                } else {
-                    this.x -= 1;
-                }
+                    grid[this.y][this.x] = this.name;
+                    return true;
+                } else if(this.collision(this.x - 1, this.y)){
+                    console.log("COLLISION AHEAD!");
+                    grid[this.y][this.x] = this.name;
+                    return true;
+                } else this.x -= 1;
                 break;
             default:
                 console.log("Wrong direction entered");
         }
+        
+        //updates the rover position in the grid
         grid[this.y][this.x] = this.name;
-        this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
-        console.log(`Rover moved forward and is now at position: [${this.x}, ${this.y}]\n`);
+
+
+        /*This conditional checks if the current 'x' or 'y' is different than the last entry in the travelLog
+        if any of the conditions evaluates to 'true', a message is logged in the console to confirmed that the rover 
+        has updated its position and a new entry is created in the travelLog*/
+
+        if(this.x != this.travelLog[this.travelLog.length - 1]['x'] || this.y != this.travelLog[this.travelLog.length - 1]['y']){
+            console.log(`Rover moved forward and is now at position: [${this.x}, ${this.y}]\n`);
+            this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
+        }
     }
 
     //moveBackward method
 
     moveBackward(){
-        grid[this.x][this.y] = " ";
+        grid[this.y][this.x] = " ";
         switch(this.direction) {
             case "N":
                 if(this.y == 10){  
+                    grid[this.y][this.x] = this.name;
                     console.log("Area out of grid's range");
-                    return;
-                } else {
-                    this.y += 1;
-                }
+                    return true;
+                } else if(this.collision(this.x, this.y + 1)){
+                    grid[this.y][this.x] = this.name;
+                    console.log("COLLISION AHEAD!");
+                    return true;
+                } else this.y += 1;
                 break;
             case "E":
                 if(this.x == 0){  
+                    grid[this.y][this.x] = this.name;
                     console.log("Area out of grid's range");
-                    return;
-                } else {
-                    this.x -= 1;
-                }
+                    return true;
+                } else if(this.collision(this.x - 1, this.y)){
+                    grid[this.y][this.x] = this.name;
+                    console.log("COLLISION AHEAD!");
+                    return true;
+                } else this.x -= 1;
                 break;
             case "S":
                 if(this.y == 0){  
+                    grid[this.y][this.x] = this.name;
                     console.log("Area out of grid's range");
-                    return;
-                } else {
-                    this.y -= 1;
-                }
+                    return true;
+                } else if(this.collision(this.x, this.y - 1)){
+                    grid[this.y][this.x] = this.name;
+                    console.log("COLLISION AHEAD!");
+                    return true;
+                } else this.y -= 1;
                 break;
             case "W":
-                if(this.x == 10){  
+                if(this.x == 10){
+                    grid[this.y][this.x] = this.name;  
                     console.log("Area out of grid's range");
-                    return;
-                } else {
-                    this.x += 1;
-                }
+                    return true;
+                } else if(this.collision(this.x + 1, this.y)){
+                    grid[this.y][this.x] = this.name;
+                    console.log("COLLISION AHEAD!");
+                    return true;
+                } else this.x += 1;
                 break;
             default:
                 console.log("Wrong direction entered");
         }
-        grid[this.x][this.y] = this.name;
-        this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
-        console.log(`Rover moved forward and is now at position: [${this.x}, ${this.y}]\n`);
-    }
+        
+        //updates the rover position in the grid
+        grid[this.y][this.x] = this.name;
 
-    //command string validation
+
+        /*This conditional checks if the current 'x' or 'y' is different than the last entry in the travelLog
+        if any of the conditions evaluates to 'true', a message is logged in the console to confirmed that the rover 
+        has updated its position and a new entry is created in the travelLog*/
+
+        if(this.x != this.travelLog[this.travelLog.length - 1]['x'] || this.y != this.travelLog[this.travelLog.length - 1]['y']){
+            console.log(`Rover moved forward and is now at position: [${this.x}, ${this.y}]\n`);
+            this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
+        }
+
+    } //TO-DO
+
+    //command string validation method
 
     validateString(str){
         //regex that returns a boolean to validate the characters of the string command
@@ -187,10 +228,11 @@ class Rover {
             return;
         } 
 
-        // for(let i = 0; i < str.length; i++){
-        str.split('').forEach(
-            letter => {
-            switch(letter.toLowerCase()){
+        for(let i = 0; i < str.length; i++){
+        // str.split('').forEach(
+            // letter => {
+            // switch(letter.toLowerCase()){
+            switch(str[i].toLowerCase()){
                 case 'r':
                     this.turnRight();
                     break;
@@ -198,24 +240,36 @@ class Rover {
                     this.turnLeft();
                     break;
                 case 'f':
-                    this.moveForward();
+                    if(this.moveForward()) return;
                     break;
                 case 'b':
-                    this.moveBackward();
+                    if(this.moveBackward()) return;
                     break;
                 default:
                     console.log("Wrong command!");
             }
-        });
+        // });
+        }
         
-        console.log(this.travelLog);
+        console.log("Travel Log:\n" + JSON.stringify(this.travelLog) + "\n");
         // this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
+    }
+
+    //collision detection
+
+    collision(x, y){
+        if(grid[y][x] !== " ") return true;
+        else return false;
     }
 }
 
-const rover = new Rover("R", 0, 0);
+//create rover variables using the Rover class
+const rover1 = new Rover("R", 0, 0);
 const rover2 = new Rover("F", 1, 1);
+const rover3 = new Rover("B", 1, 2);
 
-rover.translateCommands('rffrffrf');
+//calls translateCommands method on rover1
+rover1.translateCommands('bbb');
 
-for(let i = 0; i <= grid.length; i++) console.log(JSON.stringify(grid[i]));
+//logs the grid and rovers on the console, in a well-formatted way
+for(let i = 0; i < grid.length; i++) console.log(JSON.stringify(grid[i]));
