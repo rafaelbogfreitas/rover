@@ -25,7 +25,7 @@ class Rover {
         this.x = x;
         this.y = y;
         this.travelLog = [{x:this.x, y:this.y}];
-        grid[this.x][this.y] = this.name;
+        grid[this.y][this.x] = this.name;
     }
 
     //Turn right method
@@ -44,10 +44,13 @@ class Rover {
             case "W":
                 this.direction = "N";
                 break;
-                default:
-                    console.log("Wrong direction entered");
-                }
-            console.log(`ROVER TURNED RIGHT TO: ${this.direction}\n---------------------\n`);
+            default:
+                console.log("Wrong direction entered");
+        }
+        console.log(`
+            ROVER ${this.name.toUpperCase()} TURNED RIGHT TO: ${this.direction}
+            ----------------------------
+        `);
     }
 
     //turn left method
@@ -69,7 +72,10 @@ class Rover {
             default:
                 console.log("Wrong direction entered\n");
         }
-        console.log(`ROVER TURNED LEFT TO: ${this.direction}\n------------------\n`);
+        console.log(`
+            ROVER ${this.name.toUpperCase()} TURNED LEFT TO: ${this.direction}
+            ----------------------------
+        `);
     }
 
     //moveForward method
@@ -136,7 +142,7 @@ class Rover {
         has updated its position and a new entry is created in the travelLog*/
 
         if(this.x != this.travelLog[this.travelLog.length - 1]['x'] || this.y != this.travelLog[this.travelLog.length - 1]['y']){
-            console.log(`Rover moved forward and is now at position: [${this.x}, ${this.y}]\n`);
+            console.log(`Rover ${this.name} moved forward and is now at position: [${this.x}, ${this.y}]\n`);
             this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
         }
     }
@@ -203,7 +209,7 @@ class Rover {
         has updated its position and a new entry is created in the travelLog*/
 
         if(this.x != this.travelLog[this.travelLog.length - 1]['x'] || this.y != this.travelLog[this.travelLog.length - 1]['y']){
-            console.log(`Rover moved forward and is now at position: [${this.x}, ${this.y}]\n`);
+            console.log(`Rover ${this.name} moved backward and is now at position: [${this.x}, ${this.y}]\n`);
             this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
         }
 
@@ -251,8 +257,12 @@ class Rover {
         // });
         }
         
-        console.log("Travel Log:\n" + JSON.stringify(this.travelLog) + "\n");
-        // this.travelLog = [...this.travelLog, {x: this.x, y: this.y}];
+        console.log(`
+
+            Travel Log rover ${this.name}: 
+            ${JSON.stringify(this.travelLog)}
+
+        `);
     }
 
     //collision detection
@@ -266,10 +276,12 @@ class Rover {
 //create rover variables using the Rover class
 const rover1 = new Rover("R", 0, 0);
 const rover2 = new Rover("F", 1, 1);
-const rover3 = new Rover("B", 1, 2);
+const rover3 = new Rover("D", 1, 2);
 
 //calls translateCommands method on rover1
 rover1.translateCommands('bbb');
+rover2.translateCommands('frfffrfffffflfflfffrffrflfrbbbbbbb');
+rover3.translateCommands('b');
 
 //logs the grid and rovers on the console, in a well-formatted way
 for(let i = 0; i < grid.length; i++) console.log(JSON.stringify(grid[i]));
