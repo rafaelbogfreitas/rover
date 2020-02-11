@@ -58,7 +58,7 @@ class Rover {
     turnLeft(){
         switch(this.direction) {
             case "N":
-                rover.direction = "W";
+                this.direction = "W";
                 break;
             case "E":
                 this.direction = "N";
@@ -97,7 +97,7 @@ class Rover {
                 } else this.y -= 1
                 break;
             case "E":
-                if(this.x == 10){
+                if(this.x == grid[this.y].length - 1){
                     console.log("Area out of grid's range");
                     grid[this.y][this.x] = this.name;
                     return true;
@@ -108,7 +108,7 @@ class Rover {
                 } else this.x += 1;
                 break;
             case "S":
-                if(this.y == 10){
+                if(this.y == grid.length - 1){
                     console.log("Area out of grid's range");
                     grid[this.y][this.x] = this.name;
                     return true;
@@ -153,7 +153,7 @@ class Rover {
         grid[this.y][this.x] = " ";
         switch(this.direction) {
             case "N":
-                if(this.y == 10){  
+                if(this.y == grid.length - 1){  
                     grid[this.y][this.x] = this.name;
                     console.log("Area out of grid's range");
                     return true;
@@ -186,7 +186,7 @@ class Rover {
                 } else this.y -= 1;
                 break;
             case "W":
-                if(this.x == 10){
+                if(this.x == grid[this.y].length - 1){
                     grid[this.y][this.x] = this.name;  
                     console.log("Area out of grid's range");
                     return true;
@@ -279,9 +279,9 @@ const rover2 = new Rover("F", 1, 1);
 const rover3 = new Rover("D", 1, 2);
 
 //calls translateCommands method on rover1
-rover1.translateCommands('bbb');
-rover2.translateCommands('frfffrfffffflfflfffrffrflfrbbbbbbb');
-rover3.translateCommands('b');
+rover1.translateCommands('lbbbbbbbbbbbbbbbbbbbb');
+// rover2.translateCommands('frfffrfffffflfflfffrffrflfrbbbbbbb');
+// rover3.translateCommands('b');
 
 //logs the grid and rovers on the console, in a well-formatted way
 for(let i = 0; i < grid.length; i++) console.log(JSON.stringify(grid[i]));
