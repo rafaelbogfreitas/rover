@@ -14,6 +14,11 @@ function makeGrid(rows, columns){
 //create 10 x 10 grid with makeGrid function
 let grid = makeGrid(10, 10);
 
+const createRover = (name, x, y) => 
+    (grid[y][x] == " ") ? 
+    new Rover(name, x, y) : 
+    console.log("Position already occupied or outside grid's range")
+
 //Rover class declaration
 
 class Rover {
@@ -274,14 +279,10 @@ class Rover {
 }
 
 //create rover variables using the Rover class
-const rover1 = new Rover("R", 0, 0);
-const rover2 = new Rover("F", 1, 1);
-const rover3 = new Rover("D", 1, 2);
 
+const rover1 = createRover("R", 10, 1);
 //calls translateCommands method on rover1
-rover1.translateCommands('lbbbbbbbbbbbbbbbbbbbb');
-// rover2.translateCommands('frfffrfffffflfflfffrffrflfrbbbbbbb');
-// rover3.translateCommands('b');
+
 
 //logs the grid and rovers on the console, in a well-formatted way
 for(let i = 0; i < grid.length; i++) console.log(JSON.stringify(grid[i]));
